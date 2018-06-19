@@ -2,46 +2,52 @@
 package com.chess.engine.board;
 
 import com.chess.engine.pieces.Piece;
+import com.google.common.collect.ImmutableMap;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
+
 
 public abstract class Tile {
-    /*only accessed by subclasses and when set as final, cannot be set again */
+    /* only accessed by subclasses and when set as final, cannot be set again */
     /* To make tileCoordinate immutable */
     protected final int tileCoordinate;
 
-    private static final Map<Integer, EmptyTile> EMPTY_TILES = createAllPossibleEmptyTiles();
+    private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
-    private static Map<Integer,EmptyTile> createAllPossibleEmptyTiles() {
-
+    private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
         final Map<Integer, EmptyTile> emptyTileMap = new HashMap<>();
 
-        for (int i = 0; i < 64; i++) {
+        for(int i = 0; i < 64; i++) {
             emptyTileMap.put(i, new EmptyTile(i));
         }
 
         return ImmutableMap.copyOf(emptyTileMap);
     }
+    /* so that only method allowed to use to make Tile is with this method */
+    public static Tile createTile(final int tileCoordinate, final Piece piece) {
+        return piece != null ? new OccupiedTile(tileCoordinate, piece): EMPTY_TILES_CACHE.get(tileCoordinate);
+    }
 
-    Tile(int tileCoordinate) {
+    private Tile(int tileCoordinate) {
         this.tileCoordinate = tileCoordinate;
     }
+
     /* whether the tile is occupied or not */
     public abstract boolean isTileOccupied();
 
-    /* Retrieve the piece off a given tile */
+    /* Retrieve the piece from a given tile */
     public abstract Piece getPiece();
 
     /* the subclass for empty tiles */
     public static final class EmptyTile extends Tile{
 
-        EmptyTile(final int coordinate){
+        private EmptyTile(final int coordinate){
             super(coordinate);
         }
 
         @Override
-        public boolean isTileOccupied() {
+        public boolean isTileOccupied(){
             return false;
         }
 
@@ -50,12 +56,13 @@ public abstract class Tile {
             return null;
         }
     }
+
     /* When there's a piece in that given tile */
-    public static final class OccupiedTile extends Tile{
+    public static final class OccupiedTile extends Tile {
         /* private so that it can in no way be referenced and it is final */
         private final Piece pieceOnTile;
 
-        OccupiedTile(int tileCoordinate, Piece pieceOnTile) {
+        private OccupiedTile(int tileCoordinate, Piece pieceOnTile) {
             super(tileCoordinate);
             this.pieceOnTile = pieceOnTile;
         }
@@ -71,3 +78,4 @@ public abstract class Tile {
         }
     }
 }
+
