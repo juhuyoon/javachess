@@ -10,6 +10,8 @@ import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.chess.engine.board.Move.*;
+
 public class Knight extends Piece{
 
     /* all possible legal moves for the knight character that is within legal boundaries  */
@@ -20,7 +22,7 @@ public class Knight extends Piece{
     }
 
     @Override
-    public List<Move> calculateLegalMoves(Board board) {
+    public List<Move> calculateLegalMoves(final Board board) {
 
         final List<Move> legalMoves = new ArrayList<>(); //where the move will be stored after calculating whether they are allowed
 
@@ -38,13 +40,13 @@ public class Knight extends Piece{
 
                 final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
                 if(!candidateDestinationTile.isTileOccupied()) {
-                    legalMoves.add(new Move());
+                    legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
                 } else {
                     // if that space is occupied/filled, determine if ally or enemy
                     final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                     final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                     if(this.pieceAlliance != pieceAlliance) {
-                        legalMoves.add(new Move()); //new move to remove enemy
+                        legalMoves.add(new AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination)); //new move to remove enemy
                     }
                 }
             }
