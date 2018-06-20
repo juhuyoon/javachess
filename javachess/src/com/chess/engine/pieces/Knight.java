@@ -15,7 +15,7 @@ import static com.chess.engine.board.Move.*;
 public class Knight extends Piece{
 
     /* all possible legal moves for the knight character that is within legal boundaries  */
-    private final static int[] CANDIDATE_MOVE_COORDINATES = {-17, -15, -10, -6, 6, 10, 15, 17};
+    private final static int[] CANDIDATE_MOVE_COORDINATES = { -17, -15, -10, -6, 6, 10, 15, 17 };
 
     Knight(int piecePosition, Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
