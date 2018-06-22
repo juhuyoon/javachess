@@ -14,16 +14,24 @@ public abstract class Piece {
     /* separating black and white */
     /* Alliance will be declared as an enum https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html*/
     protected final Alliance pieceAlliance;
+    protected final boolean isFirstMove; //for pawn
 
     /*setting down the pieces */
     Piece(final int piecePosition, final Alliance pieceAlliance) {
         this.pieceAlliance = pieceAlliance;
         this.piecePosition = piecePosition;
+        //must adjust for pawn
+        this.isFirstMove = false;
     }
 
     public Alliance getPieceAlliance() {
         return this.pieceAlliance;
     }
+
+    public boolean isFirstMove() {
+        return this.isFirstMove;
+    }
+
     /* method responsible for piece moves, returns the collection of moves in a set */
     public abstract Collection<Move> calculateLegalMoves(final Board board);
 
