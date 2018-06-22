@@ -40,4 +40,7 @@ public abstract class Move {
             this.attackedPiece = attackedPiece;
         }
     }
+
+
+
 }
