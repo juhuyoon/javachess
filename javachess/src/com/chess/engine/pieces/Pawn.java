@@ -4,6 +4,7 @@ import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.BoardUtils;
 import com.chess.engine.board.Move;
+import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,9 +12,9 @@ import java.util.List;
 
 import static com.chess.engine.board.Move.*;
 
-public class Pawn extends Piece{
+public class Pawn extends Piece {
 
-    private final static int[] CANDIDATE_MOVE_COORDINATE = { 7, 8, 9, 16 };
+    private final static int[] CANDIDATE_MOVE_COORDINATE = {7, 8, 9, 16};
 
 
     Pawn(final int piecePosition, final Alliance pieceAlliance) {
@@ -29,46 +30,47 @@ public class Pawn extends Piece{
             /* apply offset to piece position : note that this would only work for one side and not the other as it has no directionality */
             final int candidateDestinationCoordinate = this.piecePosition + (this.pieceAlliance.getDirection() * currentCandidateOffset); //for black and white
 
-            if(!BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
+            if (!BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
                 continue;
             }
             /*non attacking pawn move */
-            if(currentCandidateOffset == 8 && board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
+            if (currentCandidateOffset == 8 && board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
                 //PLACEHOLDER
                 legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
                 /* pawn jump to attack*/
-            } else if(currentCandidateOffset == 16 && this.isFirstMove() && (
+            } else if (currentCandidateOffset == 16 && this.isFirstMove() && (
                     BoardUtils.SECOND_ROW[this.piecePosition] && this.getPieceAlliance().isBlack()) ||
                     (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.getPieceAlliance().isWhite())) { //whether this move for pawn is valid if it's a first move
                 final int behindCandidateDestinationCoordinate = this.piecePosition + (this.pieceAlliance.getDirection() * 8);
-                if(!board.getTile(behindCandidateDestinationCoordinate).isTileOccupied() &&
-                    !board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
-                        legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate)); //to make sure the destination tile is not occupied
+                if (!board.getTile(behindCandidateDestinationCoordinate).isTileOccupied() &&
+                        !board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
+                    legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate)); //to make sure the destination tile is not occupied
                 }
                 /* Setting up exceptions of the diagonal movement to capture. */
-            } else if(currentCandidateOffset == 7 &&
+            } else if (currentCandidateOffset == 7 &&
                     !((BoardUtils.EIGHTH_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite() ||
-                    (BoardUtils.First_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack() )))) {
+                            (BoardUtils.First_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())))) {
 
-                if(board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
+                if (board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
                     final Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();
-                    if(this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
+                    if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
                         //MORE TO DO HERE
                         legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate)); //to make sure the destination tile is not occupied
                     }
                 }
 
-            } else if(currentCandidateOffset == 9 &&
+            } else if (currentCandidateOffset == 9 &&
                     !((BoardUtils.First_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite() ||
-                    (BoardUtils.EIGHTH_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack() )))) {
-                if(board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
+                            (BoardUtils.EIGHTH_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())))) {
+                if (board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
                     final Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();
-                    if(this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
+                    if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
                         //MORE TO DO HERE
                         legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate)); //to make sure the destination tile is not occupied
                     }
+                }
             }
         }
-        return legalMoves;
+        return ImmutableList.copyOf(legalMoves);
     }
 }
