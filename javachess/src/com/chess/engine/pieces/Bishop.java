@@ -17,7 +17,8 @@ public class Bishop extends Piece{
     /* all possible moves available for the bishop */
     private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = { -9, -7, 7, 9 };
 
-    Bishop(int piecePosition, Alliance pieceAlliance) {
+    public Bishop(final Alliance pieceAlliance,
+                  final int piecePosition) {
         super(piecePosition, pieceAlliance);
     }
 
@@ -58,7 +59,7 @@ public class Bishop extends Piece{
     }
     /* all possible exclusions/bad cases of the piece */
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.First_COLUMN[currentPosition] && (candidateOffset == -9 || candidateOffset == 7);
+        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -9 || candidateOffset == 7);
     }
 
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {

@@ -17,7 +17,8 @@ public class Pawn extends Piece {
     private final static int[] CANDIDATE_MOVE_COORDINATE = {7, 8, 9, 16};
 
 
-    Pawn(final int piecePosition, final Alliance pieceAlliance) {
+    public Pawn(final Alliance pieceAlliance,
+                final int piecePosition) {
         super(piecePosition, pieceAlliance);
     }
 
@@ -49,7 +50,7 @@ public class Pawn extends Piece {
                 /* Setting up exceptions of the diagonal movement to capture. */
             } else if (currentCandidateOffset == 7 &&
                     !((BoardUtils.EIGHTH_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite() ||
-                            (BoardUtils.First_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())))) {
+                            (BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())))) {
 
                 if (board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
                     final Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();
@@ -60,7 +61,7 @@ public class Pawn extends Piece {
                 }
 
             } else if (currentCandidateOffset == 9 &&
-                    !((BoardUtils.First_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite() ||
+                    !((BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite() ||
                             (BoardUtils.EIGHTH_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())))) {
                 if (board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
                     final Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();

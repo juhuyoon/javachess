@@ -17,7 +17,8 @@ public class Knight extends Piece{
     /* all possible legal moves for the knight character that is within legal boundaries  */
     private final static int[] CANDIDATE_MOVE_COORDINATES = { -17, -15, -10, -6, 6, 10, 15, 17 };
 
-    Knight(int piecePosition, Alliance pieceAlliance) {
+    public Knight(final Alliance pieceAlliance,
+           final int piecePosition) {
         super(piecePosition, pieceAlliance);
     }
 
@@ -57,7 +58,7 @@ public class Knight extends Piece{
     //all fringe cases/exceptions for knight movement
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset){
         //if current position falls within first column of board and these are the points, then the rule breaks down on these coordinates.
-        return BoardUtils.First_COLUMN[currentPosition] && (candidateOffset == -17 || candidateOffset == -10 || candidateOffset == 6 || candidateOffset == 15);
+        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -17 || candidateOffset == -10 || candidateOffset == 6 || candidateOffset == 15);
     }
 
     private static boolean isSecondColumnExclusion(final int currentPosition, final int candidateOffset) {

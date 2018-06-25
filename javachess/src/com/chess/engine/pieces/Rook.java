@@ -15,7 +15,8 @@ public class Rook extends Piece{
     /* all possible moves available for the Rook */
     private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = { -8, -1, 1, 8 };
 
-    Rook(int piecePosition, Alliance pieceAlliance) {
+    public Rook(final Alliance pieceAlliance,
+                final int piecePosition) {
         super(piecePosition, pieceAlliance);
     }
 
@@ -57,7 +58,7 @@ public class Rook extends Piece{
     }
     /* all possible exclusions/bad cases of the piece */
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.First_COLUMN[currentPosition] && (candidateOffset == -1);
+        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -1);
     }
 
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
