@@ -20,10 +20,48 @@ public class Board {
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
+
+
+        final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
+        final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
+    }
+
+    /*To string method */
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        for(int i = 0; i< BoardUtils.NUM_TILES; i++) {
+            final String tileText = this.gameBoard.get(i).toString();
+            builder.append(String.format("%3s", tileText));
+            if((i + 1) % BoardUtils.NUM_TILES_PER_ROW == 0) {
+                builder.append("\n");
+            }
+        }
+
+        return builder.toString();
+    }
+
+    /* get piece is tile is occupied, white piece prints out different from a black piece. */
+    private static String prettyPrint(final Tile tile) {
+        return tile.toString();
+    }
+
+
+
+
+
+    /* a method where a collection of pieces are passed in and used to calculate the legal moves*/
+    private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
+        final List<Move> legalMoves = new ArrayList<>();
+        for(final Piece piece: pieces) {
+            //get a collection back of all LegalMoves and return list
+            legalMoves.addAll(piece.calculateLegalMoves(this));
+        }
+        return ImmutableList.copyOf(legalMoves);
     }
 
     /* method to return a collection of pieces onto the gameboard based on the alliance*/
-    private Collection<Piece> calculateActivePieces(final List<Tile> gameBoard, final Alliance alliance) {
+    private static Collection<Piece> calculateActivePieces(final List<Tile> gameBoard, final Alliance alliance) {
         final List<Piece> activePieces = new ArrayList<>();
         for(final Tile tile: gameBoard) {
             if(tile.isTileOccupied()) {
@@ -52,6 +90,7 @@ public class Board {
 
     //default board position
     public static Board createStandardBoard() {
+
         final Builder builder = new Builder();
         //Black Layout
         builder.setPiece(new Rook(Alliance.BLACK, 0));

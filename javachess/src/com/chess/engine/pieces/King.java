@@ -54,6 +54,12 @@ public class King extends Piece{
 
         return ImmutableList.copyOf(legalMoves);
     }
+
+    /* conversion of item to string */
+    @Override
+    public String toString() {
+        return PieceType.KING.toString();
+    }
     //all fringe cases/exceptions for knight movement
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset){
         //if current position falls within first column of board and these are the points, then the rule breaks down on these coordinates.
