@@ -75,7 +75,6 @@ public class Pawn extends Piece {
         return ImmutableList.copyOf(legalMoves);
     }
 
-
     /* conversion of item to string */
     @Override
     public String toString() {

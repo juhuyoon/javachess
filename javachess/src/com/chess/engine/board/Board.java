@@ -4,10 +4,7 @@ import com.chess.engine.Alliance;
 import com.chess.engine.pieces.*;
 import com.google.common.collect.ImmutableList;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Board {
 
@@ -47,9 +44,6 @@ public class Board {
     }
 
 
-
-
-
     /* a method where a collection of pieces are passed in and used to calculate the legal moves*/
     private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
         final List<Move> legalMoves = new ArrayList<>();
@@ -61,7 +55,8 @@ public class Board {
     }
 
     /* method to return a collection of pieces onto the gameboard based on the alliance*/
-    private static Collection<Piece> calculateActivePieces(final List<Tile> gameBoard, final Alliance alliance) {
+    private static Collection<Piece> calculateActivePieces(final List<Tile> gameBoard,
+                                                           final Alliance alliance) {
         final List<Piece> activePieces = new ArrayList<>();
         for(final Tile tile: gameBoard) {
             if(tile.isTileOccupied()) {
@@ -73,7 +68,6 @@ public class Board {
         }
         return ImmutableList.copyOf(activePieces);
     }
-
 
     public Tile getTile(final int tileCoordinate) {
         return gameBoard.get(tileCoordinate);
@@ -143,7 +137,7 @@ public class Board {
 
         //exposing builder constructor as public
         public Builder(){
-
+            this.boardConfig = new HashMap<>();
         }
 
         public Builder setPiece(final Piece piece) {
