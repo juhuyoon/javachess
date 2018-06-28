@@ -69,7 +69,8 @@ import java.util.HashMap;
 
         @Override /*if tile is occupied, print it out, if not print out a hyphen */
         public String toString() {
-            return getPiece().getPieceAlliance().isBlack() ? toString().toLowerCase() : getPiece().toString();
+            return getPiece().getPieceAlliance().isBlack() ? getPiece().toString().toLowerCase() :
+                    getPiece().toString();
         }
 
         @Override
