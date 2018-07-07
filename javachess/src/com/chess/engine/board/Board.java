@@ -48,6 +48,17 @@ public class Board {
         return builder.toString();
     }
 
+    /* extracting the pieces after accounting for them on board*/
+    public Collection<Piece> getBlackPieces() {
+        return this.blackPieces;
+    }
+
+    /* extracting the pieces after accounting for them on board */
+    public Collection<Piece> getWhitePieces() {
+        return this.whitePieces;
+    }
+
+
     /* get piece is tile is occupied, white piece prints out different from a black piece. */
     private static String prettyPrint(final Tile tile) {
         return tile.toString();
