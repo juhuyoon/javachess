@@ -15,22 +15,26 @@ public enum Alliance {
 
         @Override
         public boolean isBlack() {
+
             return false;
         }
     },
     BLACK {
         @Override
         public int getDirection() {
+
             return 1;
         }
 
         @Override
         public boolean isWhite() {
+
             return false;
         }
 
         @Override
         public boolean isBlack() {
+
             return true;
         }
     };

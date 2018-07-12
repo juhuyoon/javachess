@@ -18,8 +18,7 @@ public class Board {
 
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
-
-
+    private final Player currentPlayer;
 
     private Board(Builder builder) {
         this.gameBoard = createGameBoard(builder);
@@ -32,6 +31,7 @@ public class Board {
 
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.currentPlayer = null;
     }
 
     /*To string method */
@@ -45,7 +45,6 @@ public class Board {
                 builder.append("\n");
             }
         }
-
         return builder.toString();
     }
 
@@ -53,34 +52,38 @@ public class Board {
         return this.whitePlayer;
     }
 
-    public Player blackPlayer() {
-        return this.blackPlayer;
-    }
+            public Player blackPlayer() {
+                return this.blackPlayer;
+            }
+
+            public Player currentPlayer() {
+                return this.currentPlayer;
+            }
 
 
-    /* extracting the pieces after accounting for them on board*/
-    public Collection<Piece> getBlackPieces() {
-        return this.blackPieces;
-    }
+            /* extracting the pieces after accounting for them on board*/
+            public Collection<Piece> getBlackPieces() {
+                return this.blackPieces;
+            }
 
-    /* extracting the pieces after accounting for them on board */
-    public Collection<Piece> getWhitePieces() {
-        return this.whitePieces;
-    }
-
-
-    /* get piece is tile is occupied, white piece prints out different from a black piece. */
-    private static String prettyPrint(final Tile tile) {
-        return tile.toString();
-    }
+            /* extracting the pieces after accounting for them on board */
+            public Collection<Piece> getWhitePieces() {
+                return this.whitePieces;
+            }
 
 
-    /* a method where a collection of pieces are passed in and used to calculate the legal moves*/
-    private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
-        final List<Move> legalMoves = new ArrayList<>();
-        for(final Piece piece: pieces) {
-            //get a collection back of all LegalMoves and return list
-            legalMoves.addAll(piece.calculateLegalMoves(this));
+            /* get piece is tile is occupied, white piece prints out different from a black piece. */
+            private static String prettyPrint(final Tile tile) {
+                return tile.toString();
+            }
+
+
+            /* a method where a collection of pieces are passed in and used to calculate the legal moves*/
+            private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
+                final List<Move> legalMoves = new ArrayList<>();
+                for(final Piece piece: pieces) {
+                    //get a collection back of all LegalMoves and return list
+                    legalMoves.addAll(piece.calculateLegalMoves(this));
         }
         return ImmutableList.copyOf(legalMoves);
     }

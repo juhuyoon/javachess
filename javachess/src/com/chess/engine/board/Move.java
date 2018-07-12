@@ -16,6 +16,14 @@ public abstract class Move {
         this.destinationCoordinate = destinationCoordinate;
     }
 
+    /* Where the pieces will be moved to via tile #s*/
+    public int getDestinationCoordinate() {
+        return this.destinationCoordinate;
+    }
+
+    public abstract Board execute();
+
+
     /* Major Piece move */
     public static final class MajorMove extends Move {
 
@@ -23,6 +31,11 @@ public abstract class Move {
                          final Piece movedPiece,
                          final int destinationCoordinate) {
             super(board, movedPiece, destinationCoordinate);
+        }
+        /* When you make a move that's legal, it's going to return a new board to execute the move as the real board is immutable*/
+        @Override
+        public Board execute() {
+            return null;
         }
     }
 
@@ -38,6 +51,11 @@ public abstract class Move {
                    final Piece attackedPiece) {
             super(board, movedPiece, destinationCoordinate);
             this.attackedPiece = attackedPiece;
+        }
+
+        @Override
+        public Board execute() {
+            return null;
         }
     }
 
