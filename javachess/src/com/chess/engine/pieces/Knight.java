@@ -56,6 +56,10 @@ public class Knight extends Piece{
         return ImmutableList.copyOf(legalMoves);
     }
 
+    @Override
+    public Knight movePiece(final Move move) {
+        return new Knight(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
+    }
     /* conversion of item to string */
     @Override
     public String toString() {

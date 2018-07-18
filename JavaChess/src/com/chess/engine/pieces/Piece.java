@@ -17,7 +17,7 @@ public abstract class Piece {
     /* Alliance will be declared as an enum https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html*/
     protected final Alliance pieceAlliance;
     protected final boolean isFirstMove; //for pawn
-    private final int cashedHashCode; //anytime interacting with collections of objects, implement hashcode & equals method
+    private final int cachedHashCode; //anytime interacting with collections of objects, implement hashcode & equals method
 
     /*setting down the pieces */
     Piece(  final PieceType pieceType,
@@ -28,7 +28,7 @@ public abstract class Piece {
         this.piecePosition = piecePosition;
         //must adjust for pawn
         this.isFirstMove = false;
-        this.cashedHashCode = computeHashCode();
+        this.cachedHashCode = computeHashCode();
     }
 
     private int computeHashCode() {
@@ -55,7 +55,7 @@ public abstract class Piece {
 
     @Override
     public int hashCode() {
-        return this.cashedHashCode;
+        return this.cachedHashCode;
     }
 
     public int getPiecePosition() {
@@ -77,6 +77,9 @@ public abstract class Piece {
 
     /* method responsible for piece moves, returns the collection of moves in a set */
     public abstract Collection<Move> calculateLegalMoves(final Board board);
+
+    /* Take in a move, apply it to existing piece, and return a new piece that can be mutable with an updated piece position*/
+    public abstract Piece movePiece(Move move);
 
     public enum PieceType{
 

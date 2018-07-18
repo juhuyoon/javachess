@@ -6,6 +6,7 @@ import com.chess.engine.player.BlackPlayer;
 import com.chess.engine.player.Player;
 import com.chess.engine.player.WhitePlayer;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.*;
 
@@ -162,12 +163,18 @@ public class Board {
         return builder.build();
         }
 
+        /* Concatenation of the white player's and the black player's legal moves.  Guava Iterables*/
+    public Iterable<Move> getAllLegalMoves() {
+        return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
+    }
+
     /* Java Builder, mutable fields on the builder, then build runs, and immutable board is created based on the builder.  */
     public static class Builder {
 
         Map<Integer, Piece> boardConfig;
         //only keep track of the person moving
         Alliance nextMoveMaker;
+        Pawn enPassantPawn;
 
         //exposing builder constructor as public
         public Builder(){
@@ -186,6 +193,10 @@ public class Board {
 
         public Board build() {
             return new Board(this);
+        }
+
+        public void setEnPassantPawn(Pawn enPassantPawn) {
+            this.enPassantPawn = enPassantPawn;
         }
     }
 
