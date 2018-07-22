@@ -7,6 +7,7 @@ import com.chess.engine.board.Move;
 import com.chess.engine.pieces.King;
 import com.chess.engine.pieces.Piece;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -26,7 +27,8 @@ public abstract class Player {
 
         this.board = board;
         this.playerKing = establishKing();
-        this.legalMoves = legalMoves;
+        /* to do castling, must know the opponent's moves as well before you castle(as king must not die)*/
+        this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves)));
         this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
 
     }
