@@ -1,12 +1,17 @@
 package com.chess.gui;
 
 
+import com.chess.engine.board.Board;
 import com.chess.engine.board.BoardUtils;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +19,13 @@ public final class Table {
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
+    private Color lightTileColor = Color.decode("#FFFACD");
+    private Color darkTileColor = Color.decode("#593E1A");
+
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10,10);
 
-    private Color lightTileColor = Color.decode("#FFFACD");
-    private Color darkTileColor = Color.decode("#593E1A");
 
     /* making the menu*/
     public Table() {
@@ -73,37 +79,53 @@ private class BoardPanel extends JPanel {
         for(int i = 0; i < BoardUtils.NUM_TILES; i++) {
             final TilePanel tilePanel = new TilePanel(this, i); //creates indv. tile panel and the tileId of i.
             this.boardTiles.add(tilePanel);
-            add(tilePanel);
-        }
-        setPreferredSize(BOARD_PANEL_DIMENSION);
-        validate();
-    }
+    add(tilePanel);
+}
+    setPreferredSize(BOARD_PANEL_DIMENSION);
+    validate();
+}
 }
 
 /* For the tile */
 private class TilePanel extends JPanel{
-        private final int tileId;
+    private final int tileId;
 
-        TilePanel(final BoardPanel boardPanel, final int tileId) {
-            super (new GridBagLayout());
-            this.tileId = tileId;
-            setPreferredSize(TILE_PANEL_DIMENSION);
-            assignTileColor();
-            validate();
-        }
-        /*Light and Dark Tile color assignments */
-    private void assignTileColor() {
-            if(BoardUtils.FIRST_RANK[this.tileId] ||
-               BoardUtils.SIXTH_RANK[this.tileId] ||
-               BoardUtils.FOURTH_RANK[this.tileId] ||
-               BoardUtils.SECOND_RANK[this.tileId]) {
-                setBackground(this.tileId % 2 == 0 ? lightTileColor : darkTileColor);
-            } else if (BoardUtils.SEVENTH_RANK[this.tileId] ||
-                       BoardUtils.FIFTH_RANK[this.tileId] ||
-                       BoardUtils.THIRD_RANK[this.tileId] ||
-                       BoardUtils.EIGHTH_RANK[this.tileId]) {
-                setBackground(this.tileId % 2 != 0 ? lightTileColor : darkTileColor);
+    TilePanel(final BoardPanel boardPanel,
+              final int tileId) {
+        super (new GridBagLayout());
+        this.tileId = tileId;
+        setPreferredSize(TILE_PANEL_DIMENSION);
+        assignTileColor();
+        validate();
+    }
+    /* GUI PROGRAMMING! */
+    private void assignTilePieceIcon(final Board board) {
+        this.removeAll();
+        if(board.getTile(this.tileId).isTileOccupied()) {
+            String pieceIconPath = "";
+            try { /*image directory linking */
+                final BufferedImage image = ImageIO.read(new File(pieceIconPath + board.getTile(this.tileId).getPiece().getPieceAlliance().toString().substring(0,1) +
+                board.getTile(this.tileId).getPiece().toString() + ".gif"));
+                add(new JLabel(new ImageIcon(image)));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        }
+    }
+
+    /*Light and Dark Tile color assignments */
+    private void assignTileColor() {
+        if(BoardUtils.EIGHTH_RANK[this.tileId] ||
+                BoardUtils.SIXTH_RANK[this.tileId] ||
+                BoardUtils.FOURTH_RANK[this.tileId] ||
+                BoardUtils.SECOND_RANK[this.tileId]) {
+            setBackground(this.tileId % 2 == 0 ? lightTileColor : darkTileColor);
+        } else if (BoardUtils.SEVENTH_RANK[this.tileId] ||
+                BoardUtils.FIFTH_RANK[this.tileId] ||
+                BoardUtils.THIRD_RANK[this.tileId] ||
+                BoardUtils.FIRST_RANK[this.tileId]) {
+            setBackground(this.tileId % 2 != 0 ? lightTileColor : darkTileColor);
+        }
     }
 }
 }
