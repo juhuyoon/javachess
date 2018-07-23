@@ -40,8 +40,8 @@ public class Pawn extends Piece {
                 legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
                 /* pawn jump to attack*/
             } else if (currentCandidateOffset == 16 && this.isFirstMove() && (
-                    BoardUtils.SECOND_ROW[this.piecePosition] && this.getPieceAlliance().isBlack()) ||
-                    (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.getPieceAlliance().isWhite())) { //whether this move for pawn is valid if it's a first move
+                    BoardUtils.SEVENTH_RANK[this.piecePosition] && this.getPieceAlliance().isBlack()) ||
+                    (BoardUtils.SECOND_RANK[this.piecePosition] && this.getPieceAlliance().isWhite())) { //whether this move for pawn is valid if it's a first move
                 final int behindCandidateDestinationCoordinate = this.piecePosition + (this.pieceAlliance.getDirection() * 8);
                 if (!board.getTile(behindCandidateDestinationCoordinate).isTileOccupied() &&
                         !board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
