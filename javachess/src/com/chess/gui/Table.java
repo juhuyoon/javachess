@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,13 +21,14 @@ public final class Table {
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
+    private final Board chessBoard;
     private Color lightTileColor = Color.decode("#FFFACD");
     private Color darkTileColor = Color.decode("#593E1A");
 
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10,10);
-
+    private static String defaultPieceImagesPath = "pieces/";
 
     /* making the menu*/
     public Table() {
@@ -34,6 +37,7 @@ public final class Table {
         final JMenuBar tableMenuBar = createTableMenuBar();
         this.gameFrame.setJMenuBar(tableMenuBar);
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
+        this.chessBoard = Board.createStandardBoard();
         this.boardPanel = new BoardPanel();
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
         this.gameFrame.setVisible(true);
@@ -96,15 +100,43 @@ private class TilePanel extends JPanel{
         this.tileId = tileId;
         setPreferredSize(TILE_PANEL_DIMENSION);
         assignTileColor();
+        assignTilePieceIcon(chessBoard);
+
+        addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
         validate();
     }
     /* GUI PROGRAMMING! */
     private void assignTilePieceIcon(final Board board) {
         this.removeAll();
         if(board.getTile(this.tileId).isTileOccupied()) {
-            String pieceIconPath = "";
             try { /*image directory linking */
-                final BufferedImage image = ImageIO.read(new File(pieceIconPath + board.getTile(this.tileId).getPiece().getPieceAlliance().toString().substring(0,1) +
+                final BufferedImage image = ImageIO.read(new File(defaultPieceImagesPath + board.getTile(this.tileId).getPiece().getPieceAlliance().toString().substring(0,1) +
                 board.getTile(this.tileId).getPiece().toString() + ".gif"));
                 add(new JLabel(new ImageIcon(image)));
             } catch (IOException e) {
