@@ -19,12 +19,18 @@ public class Queen extends Piece {
 
     public Queen(final Alliance pieceAlliance,
                  final int piecePosition) {
-        super(PieceType.QUEEN, piecePosition, pieceAlliance);
+        super(PieceType.QUEEN, piecePosition, pieceAlliance, true);
+    }
+
+    /*Convenience Constructor */
+    public Queen(final Alliance pieceAlliance,
+                  final int piecePosition,
+                  final boolean isFirstMove) {
+        super(PieceType.KNIGHT, piecePosition, pieceAlliance, isFirstMove);
     }
 
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
-
         final List<Move> legalMoves = new ArrayList<>();
         /* loop through each possible moveset vector for the bishop, and for every possible vector, check if that starting position is valid */
         /* Then apply the offset to the new position moving towards, and if it's valid, then check if it's occupied by either the enemy or ally*/

@@ -38,6 +38,8 @@ public final class Table {
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
 
+    private boolean highlightLegalMoves;
+
     private Color lightTileColor = Color.decode("#FFFACD");
     private Color darkTileColor = Color.decode("#593E1A");
 
@@ -54,6 +56,7 @@ public final class Table {
         this.gameFrame.setJMenuBar(tableMenuBar);
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
         this.chessBoard = Board.createStandardBoard();
+        this.highlightLegalMoves = false;
         this.boardPanel = new BoardPanel();
         this.boardDirection = BoardDirection.NORMAL;
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
@@ -103,6 +106,20 @@ private JMenu createPreferencesMenu() {
             }
         });
         preferencesMenu.add(flipBoardMenuItem);
+
+        preferencesMenu.addSeparator();
+
+        final JCheckBoxMenuItem legalMoveHighLighterCheckbox = new JCheckBoxMenuItem("Highlight Legal Moves", false);
+
+        legalMoveHighLighterCheckbox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                highlightLegalMoves = legalMoveHighLighterCheckbox.isSelected();
+            }
+        });
+
+        preferencesMenu.add(legalMoveHighLighterCheckbox);
+
         return preferencesMenu;
 }
 
@@ -158,8 +175,41 @@ private class BoardPanel extends JPanel {
         validate();
         repaint();
     }
-
 }
+
+public static class MoveLog{
+
+    private final List<Move> moves;
+
+    MoveLog() {
+        this.moves = new ArrayList<>();
+    }
+    /*Convenience Constructor */
+    public List<Move> getMoves() {
+        return this.moves;
+    }
+
+    public void addMove(final Move move) {
+        this.moves.add(move);
+    }
+
+    public int size() {
+        return this.moves.size();
+    }
+
+    public void clear() {
+        this.moves.clear();
+    }
+
+    public Move removeMove(int index) {
+        return this.moves.remove(index);
+    }
+
+    public boolean removeMove(final Move move) {
+        return this.moves.remove(move);
+    }
+}
+
 
 /* For the tile */
 private class TilePanel extends JPanel{
@@ -258,15 +308,15 @@ private class TilePanel extends JPanel{
     }
 
     private void highlightLegals(final Board board) {
-        if(true) { //look at piece selected, get all legal moves
+        if(highlightLegalMoves) { //look at piece selected, get all legal moves
             for(final Move move : pieceLegalMoves(board)) {
-                if(move.getDestinationCoordinate() == this.tileId) {
-                    try {
-                        add ( new JLabel(new ImageIcon(ImageIO.read(new File("pieces/green_dot.png")))));
-                    } catch(Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+        if(move.getDestinationCoordinate() == this.tileId) {
+            try {
+                add ( new JLabel(new ImageIcon(ImageIO.read(new File("misc/green_dot.png")))));
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 }

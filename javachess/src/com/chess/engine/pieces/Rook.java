@@ -17,7 +17,13 @@ public class Rook extends Piece{
 
     public Rook(final Alliance pieceAlliance,
                 final int piecePosition) {
-        super(PieceType.ROOK, piecePosition, pieceAlliance);
+        super(PieceType.ROOK, piecePosition, pieceAlliance, true);
+    }
+    /*Convenience Constructor */
+    public Rook(final Alliance pieceAlliance,
+                final int piecePosition,
+                final boolean isFirstMove) {
+        super(PieceType.ROOK, piecePosition, pieceAlliance, isFirstMove);
     }
 
 

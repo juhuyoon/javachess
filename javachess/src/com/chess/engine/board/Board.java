@@ -10,7 +10,7 @@ import com.google.common.collect.Iterables;
 
 import java.util.*;
 
-public class Board {
+public final class Board {
 
     //cannot have an immutable array, but CAN have an immutable list in Java!
     private final List<Tile> gameBoard;  //captures board
@@ -49,35 +49,32 @@ public class Board {
         return builder.toString();
     }
 
+    /* get piece is tile is occupied, white piece prints out different from a black piece. */
+    private static String prettyPrint(final Tile tile) {
+        return tile.toString();
+    }
+
     public Player whitePlayer() {
         return this.whitePlayer;
     }
 
-            public Player blackPlayer() {
+    public Player blackPlayer() {
                 return this.blackPlayer;
             }
 
-            public Player currentPlayer() {
+    public Player currentPlayer() {
                 return this.currentPlayer;
             }
 
-
-            /* extracting the pieces after accounting for them on board*/
-            public Collection<Piece> getBlackPieces() {
+    /* extracting the pieces after accounting for them on board*/
+    public Collection<Piece> getBlackPieces() {
                 return this.blackPieces;
             }
 
-            /* extracting the pieces after accounting for them on board */
-            public Collection<Piece> getWhitePieces() {
+    /* extracting the pieces after accounting for them on board */
+    public Collection<Piece> getWhitePieces() {
                 return this.whitePieces;
             }
-
-
-            /* get piece is tile is occupied, white piece prints out different from a black piece. */
-            private static String prettyPrint(final Tile tile) {
-                return tile.toString();
-            }
-
 
             /* a method where a collection of pieces are passed in and used to calculate the legal moves*/
             private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
