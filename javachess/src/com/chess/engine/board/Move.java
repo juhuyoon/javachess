@@ -16,12 +16,12 @@ public abstract class Move {
     public static final Move NULL_MOVE = new NullMove();
 
     private Move(final Board board,
-                 final Piece movedPiece,
+                 final Piece pieceMoved,
                  final int destinationCoordinate) {
         this.board = board;
-        this.movedPiece = movedPiece;
+        this.movedPiece = pieceMoved;
         this.destinationCoordinate = destinationCoordinate;
-        this.isFirstMove = movedPiece.isFirstMove();
+        this.isFirstMove = pieceMoved.isFirstMove();
     }
     /* Convenient Constructor*/
     private Move(final Board board,
@@ -39,6 +39,7 @@ public abstract class Move {
         result = prime * result + this.destinationCoordinate;
         result = prime * result + this.movedPiece.hashCode();
         result = prime * result + this.movedPiece.getPiecePosition();
+        result = result + (isFirstMove ? 1 : 0);
         return result;
     }
 
@@ -54,6 +55,10 @@ public abstract class Move {
         return  getCurrentCoordinate() == otherMove.getCurrentCoordinate() &&
                 getDestinationCoordinate() == otherMove.getDestinationCoordinate() &&
                 getMovedPiece().equals(otherMove.getMovedPiece());
+    }
+
+    public Board getBoard() {
+        return this.board;
     }
 
     public int getCurrentCoordinate() {
@@ -83,7 +88,7 @@ public abstract class Move {
 
     /* When you make a move that's legal, it's going to return a new board to execute the move as the real board is immutable*/
     public Board execute() {
-        final Builder builder = new Builder();
+        final Board.Builder builder = new Builder();
         /* Goes through current player and traverse through the pieces. */
         for(final Piece piece: this.board.currentPlayer().getActivePieces()) {
             if(!this.movedPiece.equals(piece)) {
@@ -99,14 +104,13 @@ public abstract class Move {
         return builder.build();
     }
 
-
     /* Major Piece move */
     public static final class MajorMove extends Move {
 
         public MajorMove(final Board board,
-                         final Piece movedPiece,
+                         final Piece pieceMoved,
                          final int destinationCoordinate) {
-            super(board, movedPiece, destinationCoordinate);
+            super(board, pieceMoved, destinationCoordinate);
         }
 
         @Override
@@ -121,16 +125,16 @@ public abstract class Move {
 
     }
 
-    public static class AttackMove extends Move {
+    public static abstract class AttackMove extends Move {
         /* Piece being attacked */
-        final Piece attackedPiece;
+        private final Piece attackedPiece;
         /* Piece Attacking */
-        public AttackMove(final Board board,
-                   final Piece movedPiece,
+        AttackMove(final Board board,
+                   final Piece pieceMoved,
                    final int destinationCoordinate,
-                   final Piece attackedPiece) {
-            super(board, movedPiece, destinationCoordinate);
-            this.attackedPiece = attackedPiece;
+                   final Piece pieceAttacked) {
+            super(board, pieceMoved, destinationCoordinate);
+            this.attackedPiece = pieceAttacked;
         }
 
         @Override
@@ -148,11 +152,6 @@ public abstract class Move {
             }
             final AttackMove otherAttackMove = (AttackMove) other;
             return super.equals(otherAttackMove) && getAttackedPiece().equals(otherAttackMove.getAttackedPiece());
-        }
-
-        @Override
-        public Board execute() {
-            return null;
         }
 
         @Override
@@ -304,7 +303,7 @@ public abstract class Move {
     public static final class NullMove extends Move {
 
         public NullMove() {
-            super(null, null,-1);
+            super(null,-1);
         }
 
         @Override

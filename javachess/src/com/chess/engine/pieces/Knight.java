@@ -17,8 +17,8 @@ public class Knight extends Piece{
     /* all possible legal moves for the knight character that is within legal boundaries  */
     private final static int[] CANDIDATE_MOVE_COORDINATES = { -17, -15, -10, -6, 6, 10, 15, 17 };
 
-    public Knight(final Alliance pieceAlliance,
-           final int piecePosition) {
+    public Knight(final int piecePosition,
+                  final Alliance pieceAlliance) {
         super(PieceType.KNIGHT, piecePosition, pieceAlliance, true);
     }
     /*Convenience Constructor */
@@ -35,7 +35,7 @@ public class Knight extends Piece{
         final List<Move> legalMoves = new ArrayList<>(); //where the move will be stored after calculating whether they are allowed
 
         for(final int currentCandidateOffset: CANDIDATE_MOVE_COORDINATES) {
-            /*movesets ignoring expections for now*/
+            /*moveset ignoring expection for now*/
             /* applying offset +/- to current position */
             final int candidateDestinationCoordinate = this.piecePosition + currentCandidateOffset;
             if(BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {

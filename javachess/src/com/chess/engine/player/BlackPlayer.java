@@ -14,29 +14,14 @@ package com.chess.engine.player;
         import java.util.Collection;
         import java.util.List;
 
+
 public class BlackPlayer extends Player{
     public BlackPlayer(final Board board,
-    final Collection<Move> whiteStandardLegalMoves,
-    final Collection<Move> blackStandardLegalMoves) {
+                       final Collection<Move> whiteStandardLegals,
+                       final Collection<Move> blackStandardLegals) {
         /* following the argument order from Player Class*/
-        super(board, blackStandardLegalMoves, whiteStandardLegalMoves);
-
+        super(board, blackStandardLegals, whiteStandardLegals);
         }
-
-@Override
-public Collection<Piece> getActivePieces() {
-        return this.board.getBlackPieces();
-        }
-
-@Override
-public Alliance getAlliance() {
-        return Alliance.BLACK;
-        }
-
-    @Override
-    public Player getOpponent() {
-        return this.board.blackPlayer();
-    }
 
     @Override
     protected Collection<Move> calculateKingCastles(final Collection<Move> playerLegals,
@@ -81,4 +66,25 @@ public Alliance getAlliance() {
         }
         return ImmutableList.copyOf(kingCastles);
     }
+
+    @Override
+    public String toString() {
+        return Alliance.BLACK.toString();
+    }
+
+    @Override
+    public Collection<Piece> getActivePieces() {
+        return this.board.getBlackPieces();
+    }
+
+    @Override
+    public Alliance getAlliance() {
+        return Alliance.BLACK;
+    }
+
+    @Override
+    public Player getOpponent() {
+        return this.board.whitePlayer();
+    }
+
 }

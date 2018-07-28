@@ -10,7 +10,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,46 +21,16 @@ public abstract class Player {
     private final boolean isInCheck;
 
     Player(final Board board,
-    final Collection<Move> legalMoves,
-    final Collection<Move> opponentMoves) {
-
+           final Collection<Move> playerLegals,
+           final Collection<Move> opponentLegals) {
         this.board = board;
         this.playerKing = establishKing();
         /* to do castling, must know the opponent's moves as well before you castle(as king must not die)*/
-        this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves)));
-        this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
-
+        this.legalMoves = ImmutableList.copyOf(Iterables.concat(playerLegals, calculateKingCastles(playerLegals, opponentLegals)));
+        this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentLegals).isEmpty();
     }
 
-    public King getPlayerKing() {
-        return this.playerKing;
-    }
 
-    public Collection<Move> getLegalMoves() {
-        return this.legalMoves;
-    }
-
-    protected static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves) {
-        final List<Move> attackMoves = new ArrayList<>();
-
-        for (final Move move : moves) {
-            if(piecePosition == move.getDestinationCoordinate()) {
-                attackMoves.add(move);
-            }
-        }
-        return ImmutableList.copyOf(attackMoves);
-    }
-
-    /* to make sure the King exists */
-    private King establishKing() {
-        for(final Piece piece : getActivePieces()) {
-            if(piece.getPieceType().isKing()) {
-        return (King) piece;
-    }
-    }
-        throw new RuntimeException("Should not reach here! Not a valid board!");
-
-}
     public boolean isMoveLegal(final Move move) {
         return this.legalMoves.contains(move);
     }
@@ -71,7 +40,6 @@ public abstract class Player {
         return this.isInCheck;
     }
 
-        //NEW METHODS TO IMPLEMENT
     public boolean isInCheckMate() {
         return this.isInCheck && !hasEscapeMoves();
     }
@@ -80,39 +48,65 @@ public abstract class Player {
         return !this.isInCheck && !hasEscapeMoves();
     }
 
+    public boolean isCastled() {
+        return false;
+    }
+
+    public Collection<Move> getLegalMoves() {
+        return this.legalMoves;
+    }
+
+    public King getPlayerKing() {
+        return this.playerKing;
+    }
+
+    /* to make sure the King exists */
+    protected King establishKing() {
+        for(final Piece piece : getActivePieces()) {
+            if(piece.getPieceType().isKing()) {
+                return (King) piece;
+            }
+        }
+        throw new RuntimeException("Should not reach here! " +this.getAlliance()+ " king could not be established!");
+    }
+
+     static Collection<Move> calculateAttacksOnTile(final int tile, Collection<Move> moves) {
+        final List<Move> attackMoves = new ArrayList<>();
+
+        for (final Move move : moves) {
+            if(tile == move.getDestinationCoordinate()) {
+                attackMoves.add(move);
+            }
+        }
+        return ImmutableList.copyOf(attackMoves);
+    }
 
     /* to calculate if the King can escape on a secondary 'imaginary' board */
         protected boolean hasEscapeMoves() {
-            for(final Move move: this.legalMoves) {
+            for (final Move move : getLegalMoves()) {
                 final MoveTransition transition = makeMove(move);
-                if(transition.getMoveStatus().isDone()) {
+                if (transition.getMoveStatus().isDone()) {
                     return true;
                 }
             }
             return false;
-}
-
-    public boolean isCastled() {
-
-        return false;
-    }
+        }
 
     public MoveTransition makeMove(final Move move) {
         /* If move is not legal, do not switch to new board, stay at same board*/
         if(!isMoveLegal(move)) {
             return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
         }
-
         final Board transitionBoard = move.execute();
         /* Are there any attacks on Player's King, and if so, then you cannot make a move that exposes king to check. */
-        final Collection<Move> kingAttacks = Player.calculateAttacksOnTile(transitionBoard.currentPlayer().getOpponent().getPlayerKing().getPiecePosition(), transitionBoard.currentPlayer().getLegalMoves());
+        final Collection<Move> kingAttacks = Player.calculateAttacksOnTile(
+                transitionBoard.currentPlayer().getOpponent().getPlayerKing().getPiecePosition(),
+                transitionBoard.currentPlayer().getLegalMoves());
         if(!kingAttacks.isEmpty()) {
             return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
         }
         return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
-
-
 
     public abstract Collection<Piece> getActivePieces();
     public abstract Alliance getAlliance();

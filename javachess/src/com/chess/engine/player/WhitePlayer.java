@@ -22,26 +22,10 @@ public class WhitePlayer extends Player {
     }
 
     @Override
-    public Collection<Piece> getActivePieces() {
-        return this.board.getWhitePieces();
-    }
-
-    @Override
-    public Alliance getAlliance() {
-        return Alliance.WHITE;
-    }
-
-    @Override
-                    public Player getOpponent() {
-                        return this.board.whitePlayer();
-                    }
-
-                    @Override
-                    protected Collection<Move> calculateKingCastles(final Collection<Move> playerLegals,
-                                                                    final Collection<Move> opponentsLegals) {
-                        final List<Move> kingCastles = new ArrayList<>();
-
-                        if(this.playerKing.isFirstMove() && !this.isInCheck()) {
+    protected Collection<Move> calculateKingCastles(final Collection<Move> playerLegals,
+                                                    final Collection<Move> opponentsLegals) {
+        final List<Move> kingCastles = new ArrayList<>();
+        if(this.playerKing.isFirstMove() && this.playerKing.getPiecePosition() == 60 && !this.isInCheck()) {
                             /*White's king side castle */
                             if(!this.board.getTile(61).isTileOccupied() && !this.board.getTile(62).isTileOccupied()) {
                                 final Tile rookTile = this.board.getTile(63);
@@ -77,5 +61,26 @@ public class WhitePlayer extends Player {
             }
         }
         return ImmutableList.copyOf(kingCastles);
+    }
+
+
+    @Override
+    public Player getOpponent() {
+        return this.board.whitePlayer();
+    }
+
+    @Override
+    public Collection<Piece> getActivePieces() {
+        return this.board.getWhitePieces();
+    }
+
+    @Override
+    public Alliance getAlliance() {
+        return Alliance.WHITE;
+    }
+
+    @Override
+    public String toString() {
+        return Alliance.WHITE.toString();
     }
 }
